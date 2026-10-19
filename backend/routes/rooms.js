@@ -15,7 +15,15 @@ router.get('/', async (req, res) => {
 // POST a new room
 router.post('/', async (req, res) => {
   try {
-    const newRoom = await Room.create(req.body);
+    const { room_no, type, price } = req.body;
+    
+    // Force the price to be a Number just in case
+    const newRoom = await Room.create({ 
+      room_no: room_no.trim(), 
+      type: type.trim(), 
+      price: Number(price) 
+    });
+    
     res.status(201).json(newRoom);
   } catch (err) {
     if (err.code === 11000) {

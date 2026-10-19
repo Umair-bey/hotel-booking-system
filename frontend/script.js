@@ -16,27 +16,34 @@ async function loadRooms() {
 async function addRoom() {
   const room_no = document.getElementById('roomNo').value.trim();
   const type = document.getElementById('roomType').value.trim();
-  const price = parseFloat(document.getElementById('roomPrice').value);
+  const priceValue = document.getElementById('roomPrice').value;
+  const price = parseFloat(priceValue);
 
   if (!room_no || !type || isNaN(price)) {
     alert('Please fill all fields correctly.');
     return;
   }
 
-  const res = await fetch(`${API}/rooms`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ room_no, type, price })
-  });
+  try {
+    const res = await fetch(`${API}/rooms`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ room_no, type, price })
+    });
 
-  const data = await res.json();
-  if (res.ok) {
-    document.getElementById('roomNo').value = '';
-    document.getElementById('roomType').value = '';
-    document.getElementById('roomPrice').value = '';
-    loadRooms(); 
-  } else {
-    alert(data.error);
+    const data = await res.json();
+    
+    if (res.ok) {
+      document.getElementById('roomNo').value = '';
+      document.getElementById('roomType').value = '';
+      document.getElementById('roomPrice').value = '';
+      loadRooms(); 
+    } else {
+      alert('Error: ' + data.error); // This will show exactly what went wrong
+    }
+  } catch (err) {
+    alert('Network error, check console.');
+    console.error(err);
   }
 }
 
@@ -69,7 +76,6 @@ function renderRooms(rooms) {
     const div = document.createElement('div');
     div.className = 'room';
     
-    // NOTE: Changed room.id to room._id and added quotes!
     div.innerHTML = `
       <div>
         <strong>Room #${room.room_no}</strong> 
@@ -126,7 +132,6 @@ function renderBookings(bookings) {
     const div = document.createElement('div');
     div.className = 'booking';
     
-    // NOTE: Changed b.id to b._id and added quotes!
     div.innerHTML = `
       <div>
         <strong>${b.guest_name}</strong>
