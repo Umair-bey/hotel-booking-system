@@ -31,11 +31,9 @@ async function addRoom() {
 
   const data = await res.json();
   if (res.ok) {
-    // Clear the inputs
     document.getElementById('roomNo').value = '';
     document.getElementById('roomType').value = '';
     document.getElementById('roomPrice').value = '';
-    // Instantly refresh the list
     loadRooms(); 
   } else {
     alert(data.error);
@@ -71,7 +69,7 @@ function renderRooms(rooms) {
     const div = document.createElement('div');
     div.className = 'room';
     
-    // Modern Card Layout for Rooms with the Gold Book button
+    // NOTE: Changed room.id to room._id and added quotes!
     div.innerHTML = `
       <div>
         <strong>Room #${room.room_no}</strong> 
@@ -80,7 +78,7 @@ function renderRooms(rooms) {
           ${room.type} &bull; ₹${room.price} / night
         </div>
       </div>
-      <button class="book-btn" onclick="bookRoom(${room.id})">Book Now</button>
+      <button class="book-btn" onclick="bookRoom('${room._id}')">Book Now</button>
     `;
     container.appendChild(div);
   });
@@ -102,10 +100,8 @@ async function bookRoom(room_id) {
 
   const data = await res.json();
   if (res.ok) {
-    // Refresh bookings instantly
     loadBookings();
   } else {
-    // This shows the overlap error!
     alert(data.error); 
   }
 }
@@ -130,15 +126,15 @@ function renderBookings(bookings) {
     const div = document.createElement('div');
     div.className = 'booking';
     
-    // Modern Card Layout for Bookings
+    // NOTE: Changed b.id to b._id and added quotes!
     div.innerHTML = `
       <div>
         <strong>${b.guest_name}</strong>
         <div class="room-details">
-          Room #${b.room_no} (${b.type}) &bull; 📅 ${b.check_in} ➔ ${b.check_out}
+          Room ID: ${b.room_id.slice(-6)} &bull; 📅 ${b.check_in} ➔ ${b.check_out}
         </div>
       </div>
-      <button class="cancel-btn" onclick="cancelBooking(${b.id})">Cancel</button>
+      <button class="cancel-btn" onclick="cancelBooking('${b._id}')">Cancel</button>
     `;
     container.appendChild(div);
   });
@@ -151,7 +147,7 @@ async function cancelBooking(id) {
   const data = await res.json();
 
   if (res.ok) {
-    loadBookings(); // Instantly refresh the list
+    loadBookings(); 
   } else {
     alert(data.error);
   }
