@@ -2,12 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Hotel Room Booking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LuxeStay Hotel</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>✦ Hotel Room Booking</h1>
 
+  <!-- Main Title -->
+  <h1>✦ <span>Luxe Stay</span> Hotel</h1>
+
+  <!-- Add Room Section -->
   <section class="card">
     <h2>Add a Room</h2>
     <input id="roomNo" placeholder="Room No" />
@@ -16,23 +20,32 @@
     <button onclick="addRoom()">Add Room</button>
   </section>
 
+  <!-- Available Rooms Section -->
   <section class="card">
     <h2>Available Rooms</h2>
     <div class="filters">
       <input id="searchType" placeholder="Filter by type (optional)" />
-      <input id="searchIn" type="date" />
-      <input id="searchOut" type="date" />
+      <input id="searchIn" type="date" title="Check-in Date" />
+      <input id="searchOut" type="date" title="Check-out Date" />
       <button onclick="searchAvailable()">Search</button>
       <button onclick="loadRooms()">Reset</button>
     </div>
     <div id="roomList"></div>
   </section>
 
+  <!-- Active Bookings Section -->
   <section class="card">
     <h2>Bookings</h2>
     <div id="bookingList"></div>
   </section>
 
+  <!-- Footer / Credits -->
+  <footer style="text-align: center; margin-top: 40px; padding: 20px; color: #64748b; font-size: 0.9rem; border-top: 1px solid #e2e8f0; max-width: 800px; margin-left: auto; margin-right: auto;">
+    <p>Developed & UI/UX Designed by <strong style="color: var(--brand-orange);">Hammad Khan</strong></p>
+    <p style="margin-top: 5px; font-size: 0.8rem;">&copy; 2026 Luxe Stay Hotel Management System</p>
+  </footer>
+
+  <!-- Connect to JavaScript -->
   <script src="script.js"></script>
 </body>
 </html>
