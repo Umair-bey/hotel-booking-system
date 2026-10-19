@@ -1,21 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
-
-// --- Schemas ---
-const roomSchema = new mongoose.Schema({
-  room_no: { type: String, required: true, unique: true },
-  type: { type: String, required: true },
-  price: { type: Number, required: true }
-});
-const Room = mongoose.model('Room', roomSchema);
-
-const bookingSchema = new mongoose.Schema({
-  room_id: String, guest_name: String, check_in: String, check_out: String, status: String
-});
-const Booking = mongoose.model('Booking', bookingSchema);
-
-// --- Routes ---
+const { Room, Booking } = require('../models/Schemas');
 
 // GET all rooms
 router.get('/', async (req, res) => {
@@ -46,7 +31,6 @@ router.get('/available', async (req, res) => {
   if (!check_in || !check_out) return res.status(400).json({ error: 'Dates required' });
 
   try {
-    // Find bookings that overlap with the requested dates
     const overlapping = await Booking.find({
       status: 'confirmed',
       check_in: { $lt: check_out },
@@ -54,8 +38,6 @@ router.get('/available', async (req, res) => {
     });
 
     const bookedIds = overlapping.map(b => b.room_id);
-    
-    // Find rooms that are NOT in the bookedIds list
     const query = { _id: { $nin: bookedIds } };
     if (type) query.type = type;
 

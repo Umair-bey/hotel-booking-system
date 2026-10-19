@@ -1,25 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
-
-// --- Schema ---
-const bookingSchema = new mongoose.Schema({
-  room_id: { type: String, required: true },
-  guest_name: { type: String, required: true },
-  check_in: { type: String, required: true },
-  check_out: { type: String, required: true },
-  status: { type: String, default: 'confirmed' }
-});
-const Booking = mongoose.model('Booking', bookingSchema);
-
-// --- Routes ---
+const { Booking } = require('../models/Schemas');
 
 // POST: Book a room
 router.post('/', async (req, res) => {
   const { room_id, guest_name, check_in, check_out } = req.body;
 
   try {
-    // Check for overlapping confirmed bookings
     const overlap = await Booking.findOne({
       room_id: room_id, 
       status: 'confirmed',
