@@ -1,4 +1,5 @@
-const API = 'http://localhost:3000/api';
+// Dynamically detects if you are on localhost or Render
+const API = window.location.origin + '/api';
 
 // Load all rooms on page load
 window.onload = () => {
@@ -39,7 +40,7 @@ async function addRoom() {
       document.getElementById('roomPrice').value = '';
       loadRooms(); 
     } else {
-      alert('Error: ' + data.error); // This will show exactly what went wrong
+      alert('Error: ' + data.error); 
     }
   } catch (err) {
     alert('Network error, check console.');
