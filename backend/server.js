@@ -1,10 +1,14 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const connectDB = require('./models/db');
 
 const app = express();
-// Uses Render's port in production, 3000 locally
-const PORT = process.env.PORT || 3000; 
+const PORT = process.env.PORT || 3000;
+
+// Connect to MongoDB
+connectDB(); 
 
 // Middleware
 app.use(cors());
@@ -14,13 +18,10 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
 // Routes
-const roomRoutes = require('./routes/rooms');
-const bookingRoutes = require('./routes/bookings');
-
-app.use('/api/rooms', roomRoutes);
-app.use('/api/bookings', bookingRoutes);
+app.use('/api/rooms', require('./routes/rooms'));
+app.use('/api/bookings', require('./routes/bookings'));
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });

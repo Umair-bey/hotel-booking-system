@@ -1,55 +1,69 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../models/database');
+const mongoose = require('mongoose');
+
+// --- Schemas ---
+const roomSchema = new mongoose.Schema({
+  room_no: { type: String, required: true, unique: true },
+  type: { type: String, required: true },
+  price: { type: Number, required: true }
+});
+const Room = mongoose.model('Room', roomSchema);
+
+const bookingSchema = new mongoose.Schema({
+  room_id: String, guest_name: String, check_in: String, check_out: String, status: String
+});
+const Booking = mongoose.model('Booking', bookingSchema);
+
+// --- Routes ---
 
 // GET all rooms
-router.get('/', (req, res) => {
-  const rooms = db.prepare('SELECT * FROM rooms').all();
-  res.json(rooms);
+router.get('/', async (req, res) => {
+  try {
+    const rooms = await Room.find();
+    res.json(rooms);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // POST a new room
-router.post('/', (req, res) => {
-  const { room_no, type, price } = req.body;
-
-  if (!room_no || !type || price == null) {
-    return res.status(400).json({ error: 'All fields are required' });
-  }
-
+router.post('/', async (req, res) => {
   try {
-    const info = db.prepare(
-      'INSERT INTO rooms (room_no, type, price) VALUES (?, ?, ?)'
-    ).run(room_no, type, price);
-    res.status(201).json({ id: info.lastInsertRowid, room_no, type, price });
+    const newRoom = await Room.create(req.body);
+    res.status(201).json(newRoom);
   } catch (err) {
-    if (err.code === 'SQLITE_CONSTRAINT_UNIQUE') {
+    if (err.code === 11000) {
       return res.status(409).json({ error: 'Room number already exists' });
     }
     res.status(500).json({ error: err.message });
   }
 });
 
-// GET available rooms by type + date range
-router.get('/available', (req, res) => {
+// GET available rooms
+router.get('/available', async (req, res) => {
   const { type, check_in, check_out } = req.query;
+  if (!check_in || !check_out) return res.status(400).json({ error: 'Dates required' });
 
-  if (!check_in || !check_out) {
-    return res.status(400).json({ error: 'check_in and check_out are required' });
+  try {
+    // Find bookings that overlap with the requested dates
+    const overlapping = await Booking.find({
+      status: 'confirmed',
+      check_in: { $lt: check_out },
+      check_out: { $gt: check_in }
+    });
+
+    const bookedIds = overlapping.map(b => b.room_id);
+    
+    // Find rooms that are NOT in the bookedIds list
+    const query = { _id: { $nin: bookedIds } };
+    if (type) query.type = type;
+
+    const available = await Room.find(query);
+    res.json(available);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
-
-  // Find rooms of the type that have NO overlapping confirmed bookings
-  const rooms = db.prepare(`
-    SELECT * FROM rooms
-    WHERE (? IS NULL OR type = ?)
-      AND id NOT IN (
-        SELECT room_id FROM bookings
-        WHERE status = 'confirmed'
-          AND check_in < ?
-          AND check_out > ?
-      )
-  `).all(type || null, type || null, check_out, check_in);
-
-  res.json(rooms);
 });
 
 module.exports = router;
