@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hotel Room Booking</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>✦ Hotel Room Booking</h1>
+
+  <section class="card">
+    <h2>Add a Room</h2>
+    <input id="roomNo" placeholder="Room No" />
+    <input id="roomType" placeholder="Type (Deluxe/Standard)" />
+    <input id="roomPrice" type="number" placeholder="Price" />
+    <button onclick="addRoom()">Add Room</button>
+  </section>
+
+  <section class="card">
+    <h2>Available Rooms</h2>
+    <div class="filters">
+      <input id="searchType" placeholder="Filter by type (optional)" />
+      <input id="searchIn" type="date" />
+      <input id="searchOut" type="date" />
+      <button onclick="searchAvailable()">Search</button>
+      <button onclick="loadRooms()">Reset</button>
+    </div>
+    <div id="roomList"></div>
+  </section>
+
+  <section class="card">
+    <h2>Bookings</h2>
+    <div id="bookingList"></div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg-color: #0b1120;
+  --card-bg: rgba(30, 41, 59, 0.6);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  
+  /* Multi-color Palette */
+  --blue: #3b82f6;
+  --blue-hover: #2563eb;
+  --gold: #f59e0b;      /* For booking actions */
+  --gold-hover: #d97706;
+  --green: #10b981;     /* For available status */
+  --red: #e11d48;       /* For cancel actions */
+  --red-hover: #be123c;
+}
+
+* { 
+  box-sizing: border-box; 
+  font-family: 'Inter', system-ui, sans-serif; 
+  margin: 0;
+  padding: 0;
+}
+
+body { 
+  background-color: var(--bg-color);
+  /* Multi-color background glow */
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.1) 0px, transparent 50%);
+  background-attachment: fixed;
+  color: var(--text-main);
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+h1 { 
+  text-align: center; 
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 40px;
+  /* Tri-color gradient text */
+  background: linear-gradient(135deg, #60a5fa, #34d399, #fbbf24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -1px;
+}
+
+h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--text-main);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+}
+
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 0 auto 24px auto;
+  max-width: 800px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Inputs */
+input { 
+  background: rgba(15, 23, 42, 0.8);
+  color: var(--text-main);
+  padding: 12px 16px; 
+  margin: 4px 4px 12px 0; 
+  border: 1px solid var(--border-color); 
+  border-radius: 8px; 
+  outline: none;
+  transition: border-color 0.2s ease;
+  width: calc(33.333% - 8px);
+  min-width: 150px;
+}
+
+input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* Primary Buttons (Add Room, Search) */
+button {
+  padding: 12px 20px;
+  margin: 4px 4px 12px 0;
+  background: var(--blue);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover { 
+  background: var(--blue-hover); 
+  transform: translateY(-1px);
+}
+
+/* GOLD Button for Booking (Targeted via specific class) */
+.book-btn {
+  background: var(--gold);
+  color: #000; /* Dark text for contrast on gold */
+}
+.book-btn:hover {
+  background: var(--gold-hover);
+}
+
+/* RED Button for Cancel */
+.cancel-btn { 
+  background: var(--red); 
+  box-shadow: none;
+}
+.cancel-btn:hover { 
+  background: var(--red-hover); 
+}
+
+/* Room and Booking Containers */
+.room, .booking {
+  background: rgba(15, 23, 42, 0.5);
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.room:hover, .booking:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.room { border-left: 4px solid var(--green); } /* Green accent line for available rooms */
+.booking { border-left: 4px solid var(--red); } /* Red accent line for active bookings */
+
+.room span, .booking span {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.room strong, .booking strong {
+  color: var(--text-main);
+  font-weight: 600;
+  font-size: 1.1rem;
+}
