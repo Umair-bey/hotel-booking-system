@@ -1,8 +1,9 @@
 const Database = require('better-sqlite3');
 const path = require('path');
 
-// This creates hotel.db inside the backend/ folder
-const db = new Database(path.join(__dirname, '..', 'hotel.db'));
+// Uses Render's persistent disk in production, local folder for development
+const dbPath = process.env.DB_PATH || path.join(__dirname, '..', 'hotel.db');
+const db = new Database(dbPath);
 
 // Enable foreign key enforcement — critical for ON DELETE CASCADE
 db.pragma('foreign_keys = ON');
